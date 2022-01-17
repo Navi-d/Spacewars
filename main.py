@@ -7,6 +7,7 @@ import sys
 import time
 from pygame import mouse
 from pygame.locals import *
+import webbrowser
 
 
 # Intialize the pygame
@@ -94,6 +95,8 @@ menu_button_img = pygame.image.load(
     "Data\\buttons\\button_menu.png").convert_alpha()
 attention_img = pygame.image.load(
     "Data\\buttons\\button_read-before-playing.png").convert_alpha()
+github_link_img = pygame.image.load(
+    "Data\\buttons\\button_github-link.png").convert_alpha()
 
 
 class Button():
@@ -136,6 +139,7 @@ back_button = Button(10, 700, back_sound_img, 0.9)
 game_controls_button = Button(150, 10, game_controls_img, 0.7)
 menu_button = Button(200, 350, menu_button_img, 0.7)
 attention_button = Button(1000, 10, attention_img, 0.7)
+link_button = Button(500, 10, github_link_img, 0.8)
 
 # Player
 player_image = pygame.image.load("Data\photos and wallpapers\player.png")
@@ -206,13 +210,8 @@ def show_score_end(x, y):
     screen.blit(end_score, (x, y))
 
 
-font_g = pygame.font.Font(None, 30)
-
-
 def github():
-    github = font_g.render(
-        ' Github: https://github.com/Navi-d/Spacewars.git', True, (155, 0, 0))
-    screen.blit(github, (10, 720))
+    webbrowser.open('https://github.com/Navi-d/Spacewars.git')
 
 
 # timer
@@ -697,6 +696,7 @@ def menu():
         start_time = time.time()
 
         screen.blit(menu_wp, (0, 0))
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -739,7 +739,13 @@ def menu():
         if attention_button.draw():
             attention()
 
-        github()
+        if link_button.draw():
+            github()
+            for event in pygame.event.get():
+                window = pygame.display.set_mode(
+                    (s_width, s_height), pygame.RESIZABLE)
+            fullscreen = False
+
         _screen = pygame.transform.scale(screen, window.get_size())
         window.blit(_screen, (0, 0))
         pygame.display.update()
