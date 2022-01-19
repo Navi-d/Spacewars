@@ -4,7 +4,7 @@ A game to have fun and pass some time in which you are a spaceship and have to e
 
 ## How to play:
 
-You can move all over the map with the arrow keys (wasd is available as well). Aliens spawn randomly and you have to use your bullets (space button) to take them out. Remember that you can NOT shoot twwo bullets at a time (if you press space while there is another bullet on the display, the previous bullet will disappear and replaced with the new one, so spamming is not allowed!)
+You can move all over the map with the arrow keys (wasd is available as well). Aliens spawn randomly and you have to use your bullets (space button) to take them out. Remember that you can NOT shoot two bullets at a time (if you press space while there is another bullet on the display, the previous bullet will disappear and replaced with the new one, so spamming is not allowed!)
 
 ## Is there an end to the game?
 
