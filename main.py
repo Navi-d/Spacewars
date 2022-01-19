@@ -61,18 +61,21 @@ screen_pos = (0, 0)
 
 def scale():
     window_size = window.get_size()
+
     return (
-        (window_size[0] - screen_pos[0] * 2) / original_window_size[0],
-        (window_size[1] - screen_pos[1] * 2) / original_window_size[1]
+        (window_size[0]) / original_window_size[0],
+        (window_size[1]) / original_window_size[1]
     )
 
 
 def mouse_pos():
     s = scale()
+
     m_pos = pygame.mouse.get_pos()
+
     scaled_pos = (
-        (m_pos[0] - screen_pos[0]) / s[0],
-        (m_pos[1] - screen_pos[1]) / s[1]
+        (m_pos[0]) / s[0],
+        (m_pos[1]) / s[1]
     )
     return scaled_pos
 
@@ -296,7 +299,7 @@ def game_over_screen():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -341,7 +344,7 @@ def credit():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -377,7 +380,7 @@ def sound_credit():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -412,7 +415,7 @@ def game_controls():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -447,7 +450,7 @@ def attention():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -525,7 +528,7 @@ def game_play():
             elif event.type == VIDEORESIZE:
                 if not fullscreen:
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
@@ -705,7 +708,7 @@ def menu():
                 if not fullscreen:
 
                     window = pygame.display.set_mode(
-                        (event.w, event.w * original_window_size[1] / original_window_size[0]), pg_flag)
+                        (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
                     fullscreen = not fullscreen
