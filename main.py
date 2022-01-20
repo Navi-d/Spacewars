@@ -1,4 +1,3 @@
-# Imports
 import math
 import random
 import pygame
@@ -10,24 +9,21 @@ from pygame.locals import *
 import webbrowser
 
 
-# Intialize the pygame
 pygame.init()
 
-# window size
 s_width = 1200
 s_height = 750
 
-# Frames
+
 clock = pygame.time.Clock()
 
-# create the screen (to be able to be resized)
+
 pg_flag = pygame.RESIZABLE
 window = pygame.display.set_mode((s_width, s_height), pygame.RESIZABLE)
 screen = pygame.Surface((s_width, s_height))
 original_window_size = screen.get_size()
 
 
-# Background and Wallpapers
 background = pygame.image.load("Data\photos and wallpapers\\space.jpg")
 menu_wp = pygame.image.load("Data\photos and wallpapers\menu.jpg")
 game_over_wp = pygame.image.load("Data\photos and wallpapers\game over.jpg")
@@ -38,24 +34,24 @@ game_controls_wp = pygame.image.load(
 credit_image = pygame.image.load("Data\photos and wallpapers\credit wp.png")
 attention_wp = pygame.image.load("Data\photos and wallpapers\\attention.png")
 
-# for fullscreen process
+
 fullscreen = False
 
-# caption and icon
+
 pygame.display.set_caption("Spacewars")
 icon = pygame.image.load("Data\photos and wallpapers\spaceship.png")
 pygame.display.set_icon(icon)
 
-# Menu music
+
 mixer.music.load(
     "Data\sounds\Luke-Bergs-No-More-Worries.mp3")
 mixer.music.play(-1)
 
-# game over music
+
 game_over_sound = mixer.Sound(
     "Data\sounds\game over sound.wav")
 
-# about window resize
+
 screen_pos = (0, 0)
 
 
@@ -80,7 +76,6 @@ def mouse_pos():
     return scaled_pos
 
 
-# buttons
 start_img = pygame.image.load(
     "Data\\buttons\\button_start.png").convert_alpha()
 exit_img = pygame.image.load("Data\\buttons\\button_exit.png").convert_alpha()
@@ -114,10 +109,9 @@ class Button():
 
     def draw(self):
         action = False
-        # get mouse position
+
         pos = mouse_pos()
 
-        # check mouseover and clicked conditions
         if self.rect.collidepoint(pos):
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
@@ -126,7 +120,6 @@ class Button():
         if pygame.mouse.get_pressed()[0] == 0:
             self.clicked = False
 
-        # draw button on screen
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
         return action
@@ -144,7 +137,7 @@ menu_button = Button(200, 350, menu_button_img, 0.7)
 attention_button = Button(1000, 10, attention_img, 0.7)
 link_button = Button(500, 10, github_link_img, 0.8)
 
-# Player
+
 player_image = pygame.image.load("Data\photos and wallpapers\player.png")
 x_player = 420
 y_player = 580
@@ -156,7 +149,6 @@ def player(x, y):
     screen.blit(player_image, (x, y))
 
 
-# Enemy
 enemy_image = []
 x_enemy = []
 y_enemy = []
@@ -178,7 +170,6 @@ def enemy(x, y, i):
     screen.blit(enemy_image[i], (x, y))
 
 
-# Bullet
 bullet_image = pygame.image.load("Data\photos and wallpapers\\bullet.png")
 x_bullet = 0
 y_bullet = 580
@@ -193,7 +184,6 @@ def fire_bullet(x, y):
     screen.blit(bullet_image, (x + 13, y + 5))
 
 
-# score
 score_value = 0
 font = pygame.font.Font(None, 40)
 
@@ -217,7 +207,6 @@ def github():
     webbrowser.open('https://github.com/Navi-d/Spacewars.git')
 
 
-# timer
 time_limit = 60
 start_time = time.time()
 timer_font = pygame.font.Font(None, 40)
@@ -265,7 +254,6 @@ def timer(x, y):
         game_over_screen()
 
 
-# Player colliding with an enemy (based on distance)
 def is_collision_over(x_enemy, y_enemy, x_player, y_player):
     distance = math.sqrt(math.pow(x_enemy - x_player, 2) +
                          (math.pow(y_enemy - y_player, 2)))
@@ -273,7 +261,6 @@ def is_collision_over(x_enemy, y_enemy, x_player, y_player):
         return True
 
 
-# Bullet colliding with an enemy (based on distance)
 def is_collision(x_enemy, y_enemy, x_bullet, y_bullet):
     distance = math.sqrt(math.pow(x_enemy - x_bullet, 2) +
                          (math.pow(y_enemy - y_bullet, 2)))
@@ -281,10 +268,8 @@ def is_collision(x_enemy, y_enemy, x_bullet, y_bullet):
         return True
 
 
-# Game over screen
 def game_over_screen():
     global start_time
-    global screen
     global window
     global fullscreen
 
@@ -328,11 +313,8 @@ def game_over_screen():
         window.blit(_screen, (0, 0))
         pygame.display.update()
 
-# credit screen
-
 
 def credit():
-    global screen
     screen.blit(credit_image, (0, 0))
     global window
     global fullscreen
@@ -364,11 +346,8 @@ def credit():
 
         pygame.display.update()
 
-# songs credits screen
-
 
 def sound_credit():
-    global screen
     screen.blit(sound_credits_wp, (0, 0))
     global window
     global fullscreen
@@ -399,11 +378,8 @@ def sound_credit():
         window.blit(_screen, (0, 0))
         pygame.display.update()
 
-# Game details and controls screen
-
 
 def game_controls():
-    global screen
     screen.blit(game_controls_wp, (0, 0))
     global window
     global fullscreen
@@ -434,11 +410,8 @@ def game_controls():
         window.blit(_screen, (0, 0))
         pygame.display.update()
 
-# attention screen
-
 
 def attention():
-    global screen
     screen.blit(attention_wp, (0, 0))
     global window
     global fullscreen
@@ -469,20 +442,12 @@ def attention():
         pygame.display.update()
 
 
-# The main game function and while loop
 def game_play():
-    global x_player
-    global x_player_change
-    global y_player
-    global y_player_change
-    global x_bullet
-    global y_bullet
-    global bullet_state
-    global score_value
     global time_left
-    global game_over_sound
     global time_limit
-    global screen
+    global score_value
+    global bullet_state
+    global game_over_sound
     global window
     global fullscreen
     x_player = 420
@@ -518,7 +483,6 @@ def game_play():
     while running:
         game_over_sound.stop()
 
-        # RGB
         screen.blit(background, (0, 0))
 
         for event in pygame.event.get():
@@ -541,7 +505,6 @@ def game_play():
                         (s_width, s_height), pygame.RESIZABLE)
                     fullscreen = False
 
-                # if any movement keys are pressed
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                     x_player_change = -5.5
@@ -556,12 +519,12 @@ def game_play():
                         bullet_sound = mixer.Sound(
                             'Data\sounds\laser.wav')
                     bullet_sound.play()
-                    # Get the current x and y cordinate of the spaceship
+
                     x_bullet = x_player
                     y_bullet = y_player
 
                     fire_bullet(x_bullet, y_bullet)
-            # for key ups
+
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_a or event.key == pygame.K_d:
                     x_player_change = 0
@@ -569,7 +532,6 @@ def game_play():
                 if event.key == pygame.K_DOWN or event.key == pygame.K_UP or event.key == pygame.K_w or event.key == pygame.K_s:
                     y_player_change = 0
 
-        # player staying on the screen
         x_player += x_player_change
         if x_player <= 0:
             x_player = 0
@@ -581,7 +543,6 @@ def game_play():
         elif y_player >= 683:
             y_player = 683
 
-        # the player-enemy collision
         for i in range(number_of_enemies):
             enemy_player = is_collision_over(
                 x_enemy[i], y_enemy[i], x_player, y_player)
@@ -593,7 +554,6 @@ def game_play():
                 for j in range(number_of_enemies):
                     y_enemy[j] = 2000
 
-            # enemy staying on the screen
             x_enemy[i] += enemy_x_exchange[i]
             if x_enemy[i] <= 0:
                 enemy_x_exchange[i] = -enemy_x_exchange[i]
@@ -604,7 +564,7 @@ def game_play():
                 enemy_y_exchange[i] = -enemy_y_exchange[i]
             elif y_enemy[i] >= 686:
                 enemy_y_exchange[i] = -enemy_y_exchange[i]
-        # the enemy-bullet collision
+
             collision = is_collision(
                 x_enemy[i], y_enemy[i], x_bullet, y_bullet)
             if collision:
@@ -616,7 +576,7 @@ def game_play():
                 x_enemy[i] = random.randint(0, 830)
                 y_enemy[i] = random.randint(0, 100)
                 score_value += 1
-            # increase of the time and number of enemies throughout the game
+
             if score_value == 0:
                 number_of_enemies = 3
             elif score_value == 20:
@@ -647,7 +607,6 @@ def game_play():
             elif score_value == 400:
                 number_of_enemies = 20
 
-            # calling enemy function
             enemy(x_enemy[i], y_enemy[i], i)
             global start_time
             if y_enemy[i] > 1000:
@@ -656,7 +615,6 @@ def game_play():
                 game_over_screen()
                 break
 
-        # Bullet Movement
         if y_bullet <= 0:
             y_bullet = y_player
             bullet_state = "ready"
@@ -665,31 +623,21 @@ def game_play():
             fire_bullet(x_bullet, y_bullet)
             y_bullet -= y_bullet_change
 
-        # frame
         clock.tick(100)
 
-        # calling player function
         player(x_player, y_player)
 
-        # calling show score function
         show_score(x_text, y_text)
 
-        # calling timer function
         timer(300, 10)
 
-        # updating the screen
         _screen = pygame.transform.scale(screen, window.get_size())
         window.blit(_screen, (0, 0))
         pygame.display.update()
 
 
-# menu function
 def menu():
     global start_time
-    global screen
-    global s_width
-    global s_height
-    global screen
     global window
     global fullscreen
 
@@ -754,7 +702,4 @@ def menu():
         pygame.display.update()
 
 
-# calling the menu function
 menu()
-
-# THANKS FOR CHECKING THIS GAME OUT!
