@@ -33,7 +33,15 @@ game_controls_wp = pygame.image.load(
     "Data\photos and wallpapers\game controls wp.png")
 credit_image = pygame.image.load("Data\photos and wallpapers\credit wp.png")
 attention_wp = pygame.image.load("Data\photos and wallpapers\\attention.png")
-
+thunder_wp = pygame.image.load("Data\photos and wallpapers\\dragonblue.jpg")
+dragon_wp = pygame.image.load("Data\photos and wallpapers\\dragon.jpg")
+dragonfire_wp = pygame.image.load("Data\photos and wallpapers\\dragonfire.jpg")
+under_button = pygame.image.load(
+    'Data\photos and wallpapers\\under_button.png')
+under_button2 = pygame.image.load(
+    'Data\photos and wallpapers\\under_button2.png')
+under_button3 = pygame.image.load(
+    'Data\photos and wallpapers\\under_button3.png')
 
 fullscreen = False
 
@@ -50,6 +58,12 @@ mixer.music.play(-1)
 
 game_over_sound = mixer.Sound(
     "Data\sounds\game over sound.wav")
+player1sound = mixer.Sound("Data\sounds\player1sound.wav")
+player2sound = mixer.Sound("Data\sounds\player2sound.wav")
+player3sound = mixer.Sound("Data\sounds\player3sound.wav")
+icedragonsound = mixer.Sound("Data\sounds\\the ice dragon.wav")
+whitedragonsound = mixer.Sound("Data\sounds\\the white dragon.wav")
+firedragonsound = mixer.Sound("Data\sounds\\the fire dragon.wav")
 
 
 screen_pos = (0, 0)
@@ -95,6 +109,14 @@ attention_img = pygame.image.load(
     "Data\\buttons\\button_read-before-playing.png").convert_alpha()
 github_link_img = pygame.image.load(
     "Data\\buttons\\button_github-link.png").convert_alpha()
+spaceship_change_img = pygame.image.load(
+    "Data\\buttons\\button_spaceships.png").convert_alpha()
+player_1_img = pygame.image.load(
+    "Data\photos and wallpapers\player.png").convert_alpha()
+player_2_img = pygame.image.load(
+    "Data\photos and wallpapers\spaceship (3).png").convert_alpha()
+player_3_img = pygame.image.load(
+    "Data\photos and wallpapers\spaceship (4).png").convert_alpha()
 
 
 class Button():
@@ -113,6 +135,19 @@ class Button():
         pos = mouse_pos()
 
         if self.rect.collidepoint(pos):
+            collid_points = [(436, 300)]
+            for collid_point in collid_points:
+                if self.rect.collidepoint(collid_point):
+                    screen.blit(under_button, (436, 365))
+            collid_points = [(568, 300)]
+            for collid_point in collid_points:
+                if self.rect.collidepoint(collid_point):
+                    screen.blit(under_button2, (568, 365))
+            collid_points = [(700, 300)]
+            for collid_point in collid_points:
+                if self.rect.collidepoint(collid_point):
+                    screen.blit(under_button3, (700, 365))
+
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
                 action = True
@@ -136,9 +171,14 @@ game_controls_button = Button(150, 10, game_controls_img, 0.7)
 menu_button = Button(200, 350, menu_button_img, 0.7)
 attention_button = Button(1000, 10, attention_img, 0.7)
 link_button = Button(500, 10, github_link_img, 0.8)
+change_spaceship = Button(10, 50, spaceship_change_img, 0.7)
+player_1 = Button(436, 300, player_1_img, 1)
+player_2 = Button(568, 300, player_2_img, 1)
+player_3 = Button(700, 300, player_3_img, 1)
 
+player_images = [(player_1_img), (player_2_img), (player_3_img)]
+player_image = player_1_img
 
-player_image = pygame.image.load("Data\photos and wallpapers\player.png")
 x_player = 420
 y_player = 580
 x_player_change = 0
@@ -266,6 +306,217 @@ def is_collision(x_enemy, y_enemy, x_bullet, y_bullet):
                          (math.pow(y_enemy - y_bullet, 2)))
     if distance < 30 and bullet_state == 'fire':
         return True
+
+
+choice_font = pygame.font.Font(None, 40)
+
+
+def player_choice():
+    global window
+    global fullscreen
+    global player_image
+
+    while True:
+        screen.fill((255, 255, 255))
+
+        choice = choice_font.render(
+            "Please click on the spaceship you wish to play with!", True, (0, 0, 0))
+        screen.blit(choice, (250, 70))
+        x1change = 0.1
+        x2change = 0.1
+        if player_1.draw():
+            p_1()
+        if player_2.draw():
+            p_2()
+        if player_3.draw():
+            p_3()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == VIDEORESIZE:
+                if not fullscreen:
+                    window = pygame.display.set_mode(
+                        (window.get_width(), window.get_height()), pg_flag)
+            if event.type == KEYDOWN:
+                if event.key == K_f:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        window = pygame.display.set_mode(
+                            (window.get_width(), window.get_height()), pygame.FULLSCREEN)
+                if event.key == K_ESCAPE:
+
+                    window = pygame.display.set_mode(
+                        (s_width, s_height), pygame.RESIZABLE)
+                    fullscreen = False
+        if back_button.draw():
+
+            menu()
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+
+        pygame.display.update()
+
+
+def p_1():
+    global window, fullscreen, player_image
+    player_1 = Button(568, 200, player_1_img, 1)
+    icedragonsound.play()
+    player1sound.play()
+    player2sound.stop()
+    player3sound.stop()
+    whitedragonsound.stop()
+    firedragonsound.stop()
+    while True:
+        screen.blit(thunder_wp, (0, 0))
+        choice = choice_font.render(
+            "The Ice Dragon selected!", True, (0, 200, 0))
+        screen.blit(choice, (422, 150))
+        mixer.music.stop()
+
+        player_image = player_images[0]
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        if player_1.draw():
+            pass
+        if player_2.draw():
+            p_2()
+        if player_3.draw():
+            p_3()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == VIDEORESIZE:
+                if not fullscreen:
+                    window = pygame.display.set_mode(
+                        (window.get_width(), window.get_height()), pg_flag)
+            if event.type == KEYDOWN:
+                if event.key == K_f:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        window = pygame.display.set_mode(
+                            (window.get_width(), window.get_height()), pygame.FULLSCREEN)
+                if event.key == K_ESCAPE:
+
+                    window = pygame.display.set_mode(
+                        (s_width, s_height), pygame.RESIZABLE)
+                    fullscreen = False
+        if back_button.draw():
+            icedragonsound.stop()
+            player1sound.stop()
+            mixer.music.play()
+            menu()
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        pygame.display.update()
+
+
+def p_2():
+    global window, fullscreen, player_image
+    player_2 = Button(568, 200, player_2_img, 1)
+    whitedragonsound.play()
+    player2sound.play()
+    player1sound.stop()
+    player3sound.stop
+    icedragonsound.stop()
+    firedragonsound.stop()
+    while True:
+        screen.blit(dragon_wp, (0, 0))
+        choice = choice_font.render(
+            "The White Dragon selected!", True, (0, 0, 0))
+        screen.blit(choice, (420, 150))
+        mixer.music.stop()
+        player_image = player_images[1]
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        if player_1.draw():
+            p_1()
+        if player_2.draw():
+            pass
+        if player_3.draw():
+            p_3()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == VIDEORESIZE:
+                if not fullscreen:
+                    window = pygame.display.set_mode(
+                        (window.get_width(), window.get_height()), pg_flag)
+            if event.type == KEYDOWN:
+                if event.key == K_f:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        window = pygame.display.set_mode(
+                            (window.get_width(), window.get_height()), pygame.FULLSCREEN)
+                if event.key == K_ESCAPE:
+
+                    window = pygame.display.set_mode(
+                        (s_width, s_height), pygame.RESIZABLE)
+                    fullscreen = False
+        if back_button.draw():
+            whitedragonsound.stop()
+            player2sound.stop()
+            mixer.music.play()
+            menu()
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        pygame.display.update()
+
+
+def p_3():
+    global window, fullscreen, player_image
+    player_3 = Button(568, 200, player_3_img, 1)
+    firedragonsound.play()
+    player3sound.play()
+    player2sound.stop()
+    player1sound.stop()
+    icedragonsound.stop()
+    whitedragonsound.stop()
+    while True:
+        screen.blit(dragonfire_wp, (0, 0))
+        choice = choice_font.render(
+            "The Fire Dragon selected!", True, (200, 0, 0))
+        screen.blit(choice, (423, 150))
+        mixer.music.stop()
+        player_image = player_images[2]
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        if player_1.draw():
+            p_1()
+        if player_2.draw():
+            p_2()
+        if player_3.draw():
+            pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == VIDEORESIZE:
+                if not fullscreen:
+                    window = pygame.display.set_mode(
+                        (window.get_width(), window.get_height()), pg_flag)
+            if event.type == KEYDOWN:
+                if event.key == K_f:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        window = pygame.display.set_mode(
+                            (window.get_width(), window.get_height()), pygame.FULLSCREEN)
+                if event.key == K_ESCAPE:
+
+                    window = pygame.display.set_mode(
+                        (s_width, s_height), pygame.RESIZABLE)
+                    fullscreen = False
+        if back_button.draw():
+            firedragonsound.stop()
+            player3sound.stop()
+            mixer.music.play()
+            menu()
+        _screen = pygame.transform.scale(screen, window.get_size())
+        window.blit(_screen, (0, 0))
+        pygame.display.update()
 
 
 def game_over_screen():
@@ -689,6 +940,9 @@ def menu():
 
         if attention_button.draw():
             attention()
+
+        if change_spaceship.draw():
+            player_choice()
 
         if link_button.draw():
             github()
