@@ -19,10 +19,9 @@ clock = pygame.time.Clock()
 
 
 pg_flag = pygame.RESIZABLE
-window = pygame.display.set_mode((s_width, s_height), pygame.RESIZABLE)
+window = pygame.display.set_mode((s_width, s_height), pg_flag)
 screen = pygame.Surface((s_width, s_height))
 original_window_size = screen.get_size()
-
 
 background = pygame.image.load("Data\photos and wallpapers\\space.jpg")
 menu_wp = pygame.image.load("Data\photos and wallpapers\menu.jpg")
@@ -36,6 +35,7 @@ attention_wp = pygame.image.load("Data\photos and wallpapers\\attention.png")
 thunder_wp = pygame.image.load("Data\photos and wallpapers\\dragonblue.jpg")
 dragon_wp = pygame.image.load("Data\photos and wallpapers\\dragon.jpg")
 dragonfire_wp = pygame.image.load("Data\photos and wallpapers\\dragonfire.jpg")
+bullet_image = pygame.image.load("Data\photos and wallpapers\\bullet.png")
 under_button = pygame.image.load(
     'Data\photos and wallpapers\\under_button.png')
 under_button2 = pygame.image.load(
@@ -64,9 +64,6 @@ player3sound = mixer.Sound("Data\sounds\player3sound.wav")
 icedragonsound = mixer.Sound("Data\sounds\\the ice dragon.wav")
 whitedragonsound = mixer.Sound("Data\sounds\\the white dragon.wav")
 firedragonsound = mixer.Sound("Data\sounds\\the fire dragon.wav")
-
-
-screen_pos = (0, 0)
 
 
 def scale():
@@ -133,20 +130,14 @@ class Button():
         action = False
 
         pos = mouse_pos()
-
+        collidepoints = [(436, 300), (568, 300), (700, 300)]
         if self.rect.collidepoint(pos):
-            collid_points = [(436, 300)]
-            for collid_point in collid_points:
-                if self.rect.collidepoint(collid_point):
-                    screen.blit(under_button, (436, 365))
-            collid_points = [(568, 300)]
-            for collid_point in collid_points:
-                if self.rect.collidepoint(collid_point):
-                    screen.blit(under_button2, (568, 365))
-            collid_points = [(700, 300)]
-            for collid_point in collid_points:
-                if self.rect.collidepoint(collid_point):
-                    screen.blit(under_button3, (700, 365))
+            if self.rect.collidepoint(collidepoints[0]):
+                screen.blit(under_button, (436, 365))
+            if self.rect.collidepoint(collidepoints[1]):
+                screen.blit(under_button2, (568, 365))
+            if self.rect.collidepoint(collidepoints[2]):
+                screen.blit(under_button3, (700, 365))
 
             if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
                 self.clicked = True
@@ -179,43 +170,9 @@ player_3 = Button(700, 300, player_3_img, 1)
 player_images = [(player_1_img), (player_2_img), (player_3_img)]
 player_image = player_1_img
 
-x_player = 420
-y_player = 580
-x_player_change = 0
-y_player_change = 0
-
 
 def player(x, y):
     screen.blit(player_image, (x, y))
-
-
-enemy_image = []
-x_enemy = []
-y_enemy = []
-enemy_x_exchange = []
-enemy_y_exchange = []
-number_of_enemies = 20
-
-
-for i in range(number_of_enemies):
-    enemy_image.append(pygame.image.load(
-        "Data\photos and wallpapers\\alien.png"))
-    x_enemy.append(random.randint(0, 1134))
-    y_enemy.append(random.randint(0, 100))
-    enemy_x_exchange.append(3)
-    enemy_y_exchange.append(3)
-
-
-def enemy(x, y, i):
-    screen.blit(enemy_image[i], (x, y))
-
-
-bullet_image = pygame.image.load("Data\photos and wallpapers\\bullet.png")
-x_bullet = 0
-y_bullet = 580
-x_bullet_change = 0
-y_bullet_change = 15
-bullet_state = "ready"
 
 
 def fire_bullet(x, y):
@@ -226,7 +183,6 @@ def fire_bullet(x, y):
 
 score_value = 0
 font = pygame.font.Font(None, 40)
-
 x_text = 10
 y_text = 10
 
@@ -248,15 +204,12 @@ def github():
 
 
 time_limit = 60
-start_time = time.time()
 timer_font = pygame.font.Font(None, 40)
-
 plus_font = pygame.font.Font(None, 40)
+start_time = time.time()
 
 
 def timer(x, y):
-    global start_time
-    global game_over_sound
     elapsed_time = time.time() - start_time
     time_left = timer_font.render(
         "time left : " + str(time_limit - int(elapsed_time)), True, (255, 255, 255))
@@ -289,7 +242,6 @@ def timer(x, y):
     if elapsed_time > time_limit:
         mixer.music.stop()
         game_over_sound.play()
-        start_time = time.time()
         running = False
         game_over_screen()
 
@@ -322,8 +274,6 @@ def player_choice():
         choice = choice_font.render(
             "Please click on the spaceship you wish to play with!", True, (0, 0, 0))
         screen.blit(choice, (250, 70))
-        x1change = 0.1
-        x2change = 0.1
         if player_1.draw():
             p_1()
         if player_2.draw():
@@ -376,8 +326,6 @@ def p_1():
         mixer.music.stop()
 
         player_image = player_images[0]
-        _screen = pygame.transform.scale(screen, window.get_size())
-        window.blit(_screen, (0, 0))
         if player_1.draw():
             pass
         if player_2.draw():
@@ -701,35 +649,38 @@ def game_play():
     global game_over_sound
     global window
     global fullscreen
-    x_player = 420
+    x_player = 568
     y_player = 580
     x_player_change = 0
     y_player_change = 0
     x_bullet = 0
-    y_bullet = 580
-    x_bullet_change = 0
+    y_bullet = 0
     y_bullet_change = 15
     bullet_state = "ready"
     score_value = 0
-    number_of_enemies = 20
+
     enemy_image = []
     x_enemy = []
     y_enemy = []
     enemy_x_exchange = []
     enemy_y_exchange = []
+    number_of_enemies = 20
+
     for i in range(number_of_enemies):
         enemy_image.append(pygame.image.load(
             "Data\photos and wallpapers\\alien.png"))
         x_enemy.append(random.randint(0, 1134))
         y_enemy.append(random.randint(0, 100))
-        enemy_x_exchange.append(2)
-        enemy_y_exchange.append(2)
-    screen.blit(background, (0, 0))
+        enemy_x_exchange.append(2.2)
+        enemy_y_exchange.append(2.2)
+
+    def enemy(x, y, i):
+        screen.blit(enemy_image[i], (x, y))
+
     mixer.music.load(
         "Data\sounds\makai-symphony-dragon-slayer.mp3")
     mixer.music.play(-1)
     running = True
-    time_limit = 60
     pygame.display.update()
     while running:
         game_over_sound.stop()
@@ -859,16 +810,11 @@ def game_play():
                 number_of_enemies = 20
 
             enemy(x_enemy[i], y_enemy[i], i)
-            global start_time
+
             if y_enemy[i] > 1000:
-                start_time = time.time()
                 running = False
                 game_over_screen()
                 break
-
-        if y_bullet <= 0:
-            y_bullet = y_player
-            bullet_state = "ready"
 
         if bullet_state == "fire":
             fire_bullet(x_bullet, y_bullet)
@@ -910,11 +856,10 @@ def menu():
                         (window.get_width(), window.get_height()), pg_flag)
             if event.type == KEYDOWN:
                 if event.key == K_f:
-                    fullscreen = not fullscreen
+                    fullscreen = True
                     if fullscreen:
                         window = pygame.display.set_mode(
                             (window.get_width(), window.get_height()), pygame.FULLSCREEN)
-                        fullscreen = True
 
                 if event.key == K_ESCAPE:
                     window = pygame.display.set_mode(
